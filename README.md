@@ -14,23 +14,41 @@ Compara o resultado com o valor esperado no arquivo de saída correspondente na 
 Exibe no terminal se cada teste passou (OK) ou falhou (Falhou).
 
 Estrutura do Projeto
+
 Copy
+
 root/
+
 ├── warmup/
+
 │   ├── 04-digitos-diferentes/
+
 │   │   ├── input/                  # Pasta com arquivos de entrada
+
 │   │   │   ├── instance_1          # Exemplo de arquivo de entrada
+
 │   │   │   ├── instance_2
+
 │   │   │   ├── ...
+
 │   │   │   └── instance_ex1
+
 │   │   ├── output/                 # Pasta com arquivos de saída
+
 │   │   │   ├── instance_1          # Exemplo de arquivo de saída
+
 │   │   │   ├── instance_2
+
 │   │   │   ├── ...
+
 │   │   │   └── instance_ex1
+
 │   │   ├── warmup_solver.c         # Código fonte do programa
+
 │   │   └── README.md               # Este arquivo
+
 Requisitos
+
 Compilador C (por exemplo, gcc).
 
 Um ambiente de desenvolvimento (como CLion, VS Code ou qualquer editor de texto).
