@@ -1,87 +1,99 @@
-#include "../include/warmup_solver.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
 
-const char OUTPUT_DIR[] = "output/";
-const char SOLUTION_FILE[] = "solution.txt";
+// Caminhos completos das pastas de entrada e saída
+const char INPUT_DIR[] = "C:/Users/enzol/CLionProjects/root/warmup/04-digitos-diferentes/input/";
+const char OUTPUT_DIR[] = "C:/Users/enzol/CLionProjects/root/warmup/04-digitos-diferentes/output/";
 
-void solve_warmup(FILE* ptr_in_file, char* file_name, const char* warmup_instance) {
-
-    FILE *froutptr, *fwsolptr;
-    char line[100];
-    char out_file[100];
-
-    out_file[0] = '\0';
-    strcat(out_file, warmup_instance);
-    strcat(out_file, OUTPUT_DIR);
-    strcat(out_file, file_name);
-    
-    // Creating solution file
-    fwsolptr = fopen(SOLUTION_FILE, "w");
-    if (fwsolptr == NULL) {
-        printf("File '%s' can't be opened\n", SOLUTION_FILE);
-        exit(1);
+// Função para verificar se um número tem dígitos repetidos
+int has_repeated_digits(int number) {
+    int digits[10] = {0}; // Array para contar a ocorrência de cada dígito (0-9)
+    while (number > 0) {
+        int digit = number % 10;
+        if (digits[digit] == 1) {
+            return 1; // Dígito repetido encontrado
+        }
+        digits[digit] = 1;
+        number /= 10;
     }
-
-    /* *****************************************
-      Replace this code by your warmup solution
-      ****************************************** */
-
-    // Opening answer file
-    froutptr = fopen(out_file, "r");
-    if (froutptr == NULL) {
-        printf("File '%s' can't be opened\n", out_file);
-        exit(1);
-    }
-
-    // Reading from the answer file and writing to the solution file
-    while (fgets(line, 100, froutptr)) {
-        fputs(line, fwsolptr);
-    }
-
-    fclose(froutptr);
-
-    /* *************************************** */
-
-    fclose(fwsolptr);
+    return 0; // Nenhum dígito repetido
 }
 
-int check_warmup_solution(const char* file_name, const char* warmup_instance) {
+void process_file(const char* input_file) {
+    FILE *fin, *fout;
+    char output_file[256];
+    int N, M;
 
-    FILE *fanswer, *fsolution;
-    char answer_line[100], solution_line[100], answer_file[100];
-    int is_correct = 1;
-
-    answer_file[0] = '\0';
-    strcat(answer_file, warmup_instance);
-    strcat(answer_file, OUTPUT_DIR);
-    strcat(answer_file, file_name);
-
-    // Opening answer file
-    fanswer = fopen(answer_file, "r");
-    if (fanswer == NULL) {
-        printf("File '%s' can't be opened\n", answer_file);
-        exit(1);
+    // Abrindo o arquivo de entrada
+    fin = fopen(input_file, "r");
+    if (fin == NULL) {
+        printf("Erro ao abrir o arquivo de entrada: %s\n", input_file);
+        return;
     }
 
-    // Opening solution file
-    fsolution = fopen(SOLUTION_FILE, "r");
-    if (fsolution == NULL) {
-        printf("File '%s' can't be opened\n", SOLUTION_FILE);
-        exit(1);
+    // Lendo os valores de N e M do arquivo de entrada
+    fscanf(fin, "%d %d", &N, &M);
+    fclose(fin);
+
+    // Construindo o caminho do arquivo de saída correspondente
+    snprintf(output_file, sizeof(output_file), "%s%s", OUTPUT_DIR, strrchr(input_file, '/') + 1);
+
+    // Abrindo o arquivo de saída para comparar o resultado
+    fout = fopen(output_file, "r");
+    if (fout == NULL) {
+        printf("Erro ao abrir o arquivo de saída: %s\n", output_file);
+        return;
     }
 
-    // Reading from the answer file and comparing with the solution file
-    while (fgets(answer_line, 100, fanswer)) {
-
-        fgets(solution_line, 100, fsolution);
-
-        if (strcmp(answer_line, solution_line)) {
-            is_correct = 0;
-            break;
+    // Contando os números sem dígitos repetidos
+    int count = 0;
+    for (int i = N; i <= M; i++) {
+        if (!has_repeated_digits(i)) {
+            count++;
         }
     }
 
-    fclose(fanswer);
-    fclose(fsolution);
+    // Lendo o resultado esperado do arquivo de saída
+    int expected_count;
+    fscanf(fout, "%d", &expected_count);
+    fclose(fout);
 
-    return is_correct;
+    // Comparando o resultado obtido com o esperado
+    if (count == expected_count) {
+        printf("Teste %s: OK\n", input_file);
+    } else {
+        printf("Teste %s: Falhou (Esperado: %d, Obtido: %d)\n", input_file, expected_count, count);
+    }
+}
+
+int main() {
+    DIR *dir;
+    struct dirent *entry;
+
+    // Abrindo a pasta de entrada
+    dir = opendir(INPUT_DIR);
+    if (dir == NULL) {
+        printf("Erro ao abrir a pasta de entrada: %s\n", INPUT_DIR);
+        return 1;
+    }
+
+    // Processando cada arquivo na pasta de entrada
+    while ((entry = readdir(dir)) != NULL) {
+        // Ignorando diretórios "." e ".."
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        // Construindo o caminho completo do arquivo de entrada
+        char input_file[256];
+        snprintf(input_file, sizeof(input_file), "%s%s", INPUT_DIR, entry->d_name);
+
+        // Processando o arquivo
+        process_file(input_file);
+    }
+
+    closedir(dir);
+    return 0;
 }
