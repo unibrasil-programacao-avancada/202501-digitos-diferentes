@@ -1,3 +1,9 @@
+Alunos que fizeram o exercicio
+Enzo Luiz Berlesi Salles  RA: 2023102306 
+Gustavo Henrique RA: 2021103072
+Rafael Gonçalves RA: 2023100605
+
+
 Projeto: Contagem de Números sem Dígitos Repetidos
 
 Este projeto é uma solução para o problema "Dígitos Diferentes", que consiste em contar quantos números em um intervalo [N, M] não possuem dígitos repetidos. O programa lê os valores de N e M de arquivos de entrada, processa os dados e compara os resultados com arquivos de saída pré-definidos.
