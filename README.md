@@ -1,6 +1,5 @@
 Alunos que fizeram o exercicio
-Enzo Luiz Berlesi Salles  RA: 2023102306 
-Gustavo Henrique RA: 2021103072
+Enzo Luiz Berlesi Salles  RA: 2023102306 <br>
 Rafael Gonçalves RA: 2023100605
 
 
